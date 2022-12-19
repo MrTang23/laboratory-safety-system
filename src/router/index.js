@@ -24,9 +24,9 @@ const router = new VueRouter({
 
 //挂载路由导航守卫
 router.beforeEach((to, from, next) => {
-    //to 表示将要访问的路径
-    //from 表示从哪个路径跳转来
-    //next 为一个函数，表示放行
+    //to表示将要访问的路径
+    //from表示从哪个路径跳转来
+    //next为一个函数，表示放行
     //next() 放行   next('/....') 表示强制跳转
     if (to.path === '/login') return next();
     let tokenStr = sessionStorage.getItem('token')
