@@ -129,7 +129,7 @@ export default {
                         //将token信息放到请求头中
                         //this.$setToken();
                         //跳转到后台管理
-                        //this.$router.push("/layout");
+                        this.$router.push("/home");
                     } else {
                         this.$message.error("账号或密码错误");
                         this.$refs[formName].resetFields(); //登录失败后重置表单
