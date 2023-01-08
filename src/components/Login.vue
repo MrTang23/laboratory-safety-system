@@ -1,6 +1,5 @@
 <template>
     <div class="login_container">
-        <img src="../assets/system-background.jpg" alt="" class="background" />
         <!--登录区域-->
         <div style="display: flex">
             <transition name="el-zoom-in-center">
@@ -147,8 +146,20 @@ export default {
 
 <style lang="less" scoped>
 .login_container {
-    background-color: #409eff;
+    //background-color: #409eff;
+    //height: 100%;
+    background-image: url("../assets/system-background.jpg") ;
+    background-size: 100% 100%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;  /*关键*/
+    background-position: center;
+    top:0;
+    left: 0;
+    width: 100%;
     height: 100%;
+    z-index: -10;
+    zoom:1;
     font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB",
         "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
 }
@@ -191,11 +202,6 @@ export default {
     font-size: 15px;
 }
 
-.background {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
 
 .footer {
     width: 100%;
