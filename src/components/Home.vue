@@ -133,6 +133,37 @@ export default {
     //获取实时屏幕尺寸大小
     //返回值：screenHeight,screenWeight
     mounted() {
+        //监测是否为手机端
+        const device = navigator.userAgent;
+        if (device.indexOf("iPad") > -1) {
+            //  ipad
+            this.$notify.info({
+                title: "提示",
+                message:
+                    "使用iPad浏览可能无法达到最佳浏览效果，但不会造成任何实际影响。",
+            });
+        } else if (
+            device.indexOf("Android") > -1 ||
+            device.indexOf("ios") > -1
+        ) {
+            // 手机
+            this.$alert(
+                "手机端浏览可能造成极差的用户体验。请使用ipad/pad/电脑端。",
+                "警告",
+                {
+                    confirmButtonText: "确定",
+                    type: "warning",
+                    callback: (action) => {
+                        window.opener = null;
+                        window.open("about:blank", "_top").close();
+                    },
+                }
+            );
+        } else {
+            // 电脑
+        }
+        
+        //实时监测屏幕尺寸
         this.screenWidth = document.body.clientWidth;
         this.screenHeight = document.body.clientHeight;
         window.onresize = () => {
@@ -152,6 +183,13 @@ export default {
         };
     },
     methods: {
+        //设备校验
+        _isMobile() {
+            let flag = navigator.userAgent.match(
+                /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i
+            );
+            return flag;
+        },
         logout() {
             let satoken = localStorage.getItem("user_token");
             this.$get("/logout", { satoken });

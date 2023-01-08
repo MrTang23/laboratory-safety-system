@@ -86,10 +86,49 @@ export default {
             },
         };
     },
+    mounted() {
+        const device = navigator.userAgent;
+        if (device.indexOf("iPad") > -1) {
+            //  ipad
+            this.$notify.info({
+                title: "提示",
+                message:
+                    "使用iPad浏览可能无法达到最佳浏览效果，但不会造成任何实际影响。",
+            });
+        } else if (
+            device.indexOf("Android") > -1 ||
+            device.indexOf("ios") > -1
+        ) {
+            // 手机
+            this.$alert(
+                "手机端浏览可能造成极差的用户体验。请使用ipad/pad/电脑端。",
+                "警告",
+                {
+                    confirmButtonText: "确定",
+                    type: "warning",
+                    callback: (action) => {
+                        window.opener = null;
+                        window.open("about:blank", "_top").close();
+                    },
+                }
+            );
+        } else {
+            // 电脑
+        }
+    },
+
     created() {
         this.show = !this.show;
     },
     methods: {
+        //登录时设备校验
+        _isMobile() {
+            let flag = navigator.userAgent.match(
+                /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i
+            );
+            return flag;
+        },
+
         //页面加载完成后表单出现动画
         loginFormZoom() {},
 
@@ -148,18 +187,18 @@ export default {
 .login_container {
     //background-color: #409eff;
     //height: 100%;
-    background-image: url("../assets/system-background.jpg") ;
+    background-image: url("../assets/system-background.jpg");
     background-size: 100% 100%;
     background-size: cover;
     background-repeat: no-repeat;
-    background-attachment: fixed;  /*关键*/
+    background-attachment: fixed; /*关键*/
     background-position: center;
-    top:0;
+    top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     z-index: -10;
-    zoom:1;
+    zoom: 1;
     font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB",
         "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
 }
@@ -201,7 +240,6 @@ export default {
     transform: translate(70%, 30%);
     font-size: 15px;
 }
-
 
 .footer {
     width: 100%;
