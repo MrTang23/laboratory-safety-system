@@ -145,7 +145,7 @@ export default {
             this.$refs[formName].validate(async (valid) => {
                 //判断表单数据是否验证成功
                 if (valid) {
-                    let { data } = await this.$http.post(
+                    let { data } = await this.$post(
                         "/login",
                         this.loginForm
                     );

@@ -25,7 +25,16 @@ axios.interceptors.request.use(config => {
     return config
 })
 
-Vue.prototype.$http = axios
+//创建一个get/post请求方法
+let get = async function (url, params) {
+    let { data } = await instance.get(url, { params });//异步方法
+    return data//数据返回成一个整体
+}
+let post = async function (url, params) {
+    let { data } = await instance.post(url, params);
+    return data
+}
+//Vue.prototype.$http = axios
 
 
 Vue.config.productionTip = false
@@ -34,3 +43,8 @@ new Vue({
     router,
     render: h => h(App)
 }).$mount('#app')
+
+export {
+    get,
+    post
+}
