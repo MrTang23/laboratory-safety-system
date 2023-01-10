@@ -118,6 +118,9 @@ export default {
     },
 
     created() {
+        //登录页面创建时清空session storage，同时写入路由路径，登录成功后直接读取确保左侧菜单激活首页
+        sessionStorage.clear()
+        sessionStorage.setItem("route_path","/welcome")
         this.show = !this.show;
     },
     methods: {
@@ -145,7 +148,7 @@ export default {
             this.$refs[formName].validate(async (valid) => {
                 //判断表单数据是否验证成功
                 if (valid) {
-                    let { data } = await this.$post(
+                    let { data } = await this.$http.post(
                         "/login",
                         this.loginForm
                     );
