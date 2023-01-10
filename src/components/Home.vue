@@ -23,12 +23,14 @@
                         :unique-opened="true"
                         :collapse="isCollapse"
                         :collapse-transition="false"
+                        router
+                        :default-active="path"
                     >
-                        <el-menu-item index="0">
+                        <el-menu-item index="/welcome" @click="getRoutePath()">
                             <i class="el-icon-menu"></i>
                             <span slot="title">首页</span>
                         </el-menu-item>
-                        <el-menu-item index="1">
+                        <el-menu-item index="1" @click="getRoutePath()">
                             <i class="el-icon-s-marketing"></i>
                             <span slot="title">数字孪生大屏</span>
                         </el-menu-item>
@@ -39,18 +41,37 @@
                                 <span class="submenu">物视镜子</span>
                             </template>
 
-                            <el-menu-item index="2-0">药品入库</el-menu-item>
-                            <el-menu-item index="2-1">实验平台</el-menu-item>
-                            <el-menu-item index="2-2">物品柜</el-menu-item>
-                            <el-menu-item index="2-3">借出管理</el-menu-item>
+                            <el-menu-item index="2-0" @click="getRoutePath()"
+                                >药品入库</el-menu-item
+                            >
+                            <el-menu-item index="2-1" @click="getRoutePath()"
+                                >实验平台</el-menu-item
+                            >
+                            <el-menu-item index="2-2" @click="getRoutePath()"
+                                >物品柜</el-menu-item
+                            >
+                            <el-menu-item index="2-3" @click="getRoutePath()"
+                                >借出管理</el-menu-item
+                            >
                         </el-submenu>
                         <el-submenu index="3">
                             <template slot="title">
                                 <i class="el-icon-user-solid"></i>
                                 <span class="submenu">团队成员管理</span>
                             </template>
-                            <el-menu-item index="3-0">成员管理</el-menu-item>
-                            <el-menu-item index="3-1">权限分配</el-menu-item>
+                            <el-menu-item
+                                index="/adminList"
+                                @click="getRoutePath()"
+                                >管理员</el-menu-item
+                            >
+                            <el-menu-item
+                                index="/memberList"
+                                @click="getRoutePath()"
+                                >普通成员</el-menu-item
+                            >
+                            <el-menu-item indememberx="3-1" @click="getRoutePath()"
+                                >权限分配</el-menu-item
+                            >
                         </el-submenu>
                     </el-menu>
                 </el-aside>
@@ -59,6 +80,7 @@
                 <el-container>
                     <!--页面头部-->
                     <el-header style="height: 80px" class="header">
+                        
                         <el-button
                             type="primary"
                             icon="el-icon-s-operation"
@@ -84,7 +106,9 @@
                         />
                         <div class="user-info-move">
                             <div class="user-info-username">
-                                {{ this.screenWidth >= 880 ? this.username: "" }}
+                                {{
+                                    this.screenWidth >= 880 ? this.username : ""
+                                }}
                             </div>
                             <div class="user-info-email">
                                 {{
@@ -98,10 +122,9 @@
 
                     <!--页面主体内容-->
                     <el-main class="main-outer">
-                        <el-header style="height: 5%" class="header-address">
-                            首页 > 权限管理
-                        </el-header>
-                        <el-main class="main-inner"> 权限分配勾选页面 </el-main>
+                        <!--路由占位符-->
+                        <router-view></router-view>
+                       
                     </el-main>
                 </el-container>
             </el-container>
@@ -120,16 +143,19 @@
 export default {
     data() {
         return {
-            username:sessionStorage.getItem('username'),
+            username: sessionStorage.getItem("username"),
             //是否折叠，false为不折叠
             isCollapse: false,
-
+            //将路径从session storage中提取出。避免因刷新丢失菜单激活状态
+            path: "",
             //监听浏览器窗口大小
             screenWidth: "",
             screenHeight: "",
         };
     },
-
+    created() {
+        this.path = sessionStorage.getItem("route_path");
+    },
     //获取实时屏幕尺寸大小
     //返回值：screenHeight,screenWeight
     mounted() {
@@ -162,7 +188,7 @@ export default {
         } else {
             // 电脑
         }
-        
+
         //实时监测屏幕尺寸
         this.screenWidth = document.body.clientWidth;
         this.screenHeight = document.body.clientHeight;
@@ -183,6 +209,10 @@ export default {
         };
     },
     methods: {
+        //获取当前路径
+        getRoutePath() {
+            sessionStorage.setItem("route_path", this.$route.path);
+        },
         //设备校验
         _isMobile() {
             let flag = navigator.userAgent.match(
@@ -211,13 +241,19 @@ export default {
                     callback: (action) => {
                         this.$notify({
                             title: "成功",
-                            message: "此时浏览器窗体为"+this.screenWidth+" * "+this.screenHeight+"px，谢谢配合。",
+                            message:
+                                "此时浏览器窗体为" +
+                                this.screenWidth +
+                                " * " +
+                                this.screenHeight +
+                                "px，谢谢配合。",
                             type: "success",
                         });
                     },
                 }
             );
         },
+        
     },
 };
 </script>
@@ -275,18 +311,15 @@ export default {
 
     .main-outer {
         background-color: #ebeef5;
-        color: rgb(117, 116, 116);
-        text-align: center;
+        color: #303133;
+        //text-align: center;
         box-shadow: 5px -1px 5px -2px #606266 inset;
-        padding-top: 0;
+        padding: 13px 23px 23px 23px;
     }
-    .main-inner {
-        //background-color: #ebeef5;
-        background-color: #ffffff;
-        color: rgb(117, 116, 116);
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
-        height: 95%;
-        border-radius: 10px;
+   
+    .path {
+        transform: translate(0, 70%);
+        font-size: 14px;
     }
     .aside-title {
         vertical-align: middle;
