@@ -69,9 +69,24 @@
                                 @click="getRoutePath()"
                                 >普通成员</el-menu-item
                             >
-                            <el-menu-item indememberx="3-1" @click="getRoutePath()"
-                                >权限分配</el-menu-item
+                            
+                        </el-submenu>
+                        <el-submenu index="4">
+                            <template slot="title">
+                                <i class="el-icon-s-cooperation"></i>
+                                <span class="submenu">权限管理</span>
+                            </template>
+                            <el-menu-item
+                                index="/"
+                                @click="getRoutePath()"
+                                >角色列表</el-menu-item
                             >
+                            <el-menu-item
+                                index="/"
+                                @click="getRoutePath()"
+                                >权限列表</el-menu-item
+                            >
+                            
                         </el-submenu>
                     </el-menu>
                 </el-aside>

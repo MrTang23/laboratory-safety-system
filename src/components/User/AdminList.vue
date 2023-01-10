@@ -70,7 +70,7 @@
                     prop="phoneNumber"
                     width="110px"
                 ></el-table-column>
-                <el-table-column label="激活状态" width="100px">
+                <el-table-column label="激活状态" width="90px">
                     <template slot-scope="scope">
                         <el-switch
                             v-model="scope.row.isNotFrozen"
