@@ -38,7 +38,7 @@
                         <el-submenu index="2">
                             <template slot="title">
                                 <i class="el-icon-s-management"></i>
-                                <span class="submenu">物视镜子</span>
+                                <span class="submenu">物视镜</span>
                             </template>
 
                             <el-menu-item index="2-0" @click="getRoutePath()"
@@ -69,9 +69,24 @@
                                 @click="getRoutePath()"
                                 >普通成员</el-menu-item
                             >
-                            <el-menu-item indememberx="3-1" @click="getRoutePath()"
-                                >权限分配</el-menu-item
+                            
+                        </el-submenu>
+                        <el-submenu index="4">
+                            <template slot="title">
+                                <i class="el-icon-s-cooperation"></i>
+                                <span class="submenu">权限管理</span>
+                            </template>
+                            <el-menu-item
+                                index="/"
+                                @click="getRoutePath()"
+                                >角色列表</el-menu-item
                             >
+                            <el-menu-item
+                                index="/"
+                                @click="getRoutePath()"
+                                >权限列表</el-menu-item
+                            >
+                            
                         </el-submenu>
                     </el-menu>
                 </el-aside>
@@ -155,10 +170,43 @@ export default {
     },
     created() {
         this.path = sessionStorage.getItem("route_path");
+        this.screenWidth = document.body.clientWidth;
+        this.screenHeight = document.body.clientHeight;
+        sessionStorage.setItem("screen-height",this.screenHeight)
+        if (this.screenWidth <= 1170) {
+                    this.isCollapse = true;
+                }
+                if (this.screenWidth > 1170) {
+                    this.isCollapse = false;
+                }
+                if (this.screenWidth <= 800 && this.screenWidth >= 790) {
+                    this.messageScreenWidth();
+                }
+        
     },
     //获取实时屏幕尺寸大小
     //返回值：screenHeight,screenWeight
     mounted() {
+         //实时监测屏幕尺寸
+         this.screenWidth = document.body.clientWidth;
+        this.screenHeight = document.body.clientHeight;
+        window.onresize = () => {
+            return (() => {
+                this.screenWidth = document.body.clientWidth;
+                this.screenHeight = document.body.clientHeight;
+                sessionStorage.setItem("screen-height",this.screenHeight)
+                if (this.screenWidth <= 1170) {
+                    this.isCollapse = true;
+                }
+                if (this.screenWidth > 1170) {
+                    this.isCollapse = false;
+                }
+                if (this.screenWidth <= 800 && this.screenWidth >= 790) {
+                    this.messageScreenWidth();
+                }
+            })();
+        };
+        
         //监测是否为手机端
         const device = navigator.userAgent;
         if (device.indexOf("iPad") > -1) {
@@ -189,24 +237,7 @@ export default {
             // 电脑
         }
 
-        //实时监测屏幕尺寸
-        this.screenWidth = document.body.clientWidth;
-        this.screenHeight = document.body.clientHeight;
-        window.onresize = () => {
-            return (() => {
-                this.screenWidth = document.body.clientWidth;
-                this.screenHeight = document.body.clientHeight;
-                if (this.screenWidth <= 1170) {
-                    this.isCollapse = true;
-                }
-                if (this.screenWidth > 1170) {
-                    this.isCollapse = false;
-                }
-                if (this.screenWidth <= 800 && this.screenWidth >= 790) {
-                    this.messageScreenWidth();
-                }
-            })();
-        };
+       
     },
     methods: {
         //获取当前路径

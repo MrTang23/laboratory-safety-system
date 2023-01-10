@@ -8,7 +8,7 @@
                 >首页</el-breadcrumb-item
             >
             <el-breadcrumb-item>团队成员管理</el-breadcrumb-item>
-            <el-breadcrumb-item>管理员</el-breadcrumb-item>
+            <el-breadcrumb-item>普通成员</el-breadcrumb-item>
         </el-breadcrumb>
         <el-card class="box-card">
             <!--搜索、添加用户-->
@@ -17,7 +17,7 @@
                     <el-input
                         placeholder="请输入搜索内容"
                         class="input-with-select"
-                        v-model="adminSearchQuery"
+                        v-model="memberSearchQuery"
                     >
                         <el-button
                             slot="append"
@@ -28,17 +28,12 @@
                 </el-col>
                 <el-col :span="4">
                     <el-button type="primary" @click="addDialogVisible = true"
-                        >添加管理员</el-button
+                        >添加普通成员</el-button
                     >
                 </el-col>
             </el-row>
             <!--渲染列表-->
-            <el-table
-                :data="adminList"
-                border
-                stripe
-                :max-height="screenHeight"
-            >
+            <el-table :data="memberList" border stripe :max-height="this.screenHeight">
                 <el-table-column type="index" label="#"></el-table-column>
                 <el-table-column
                     label="用户名"
@@ -74,7 +69,7 @@
                     <template slot-scope="scope">
                         <el-switch
                             v-model="scope.row.isNotFrozen"
-                            @change="adminStateChange(scope.row)"
+                            @change="memberStateChange(scope.row)"
                         >
                         </el-switch>
                     </template>
@@ -125,7 +120,7 @@
 
         <!--添加用户对话框-->
         <el-dialog
-            title="添加管理员"
+            title="添加普通成员"
             :visible.sync="addDialogVisible"
             width="50%"
         >
@@ -142,7 +137,10 @@
                     <el-input v-model="addUserForm.password"></el-input>
                 </el-form-item>
                 <el-form-item label="身份" prop="roleId">
-                    <el-input :disabled="true" placeholder="管理员"></el-input>
+                    <el-input
+                        :disabled="true"
+                        placeholder="普通成员"
+                    ></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -189,10 +187,10 @@
 export default {
     data() {
         return {
-            adminList: [],
-            updateRowId: "", //超级管理员更新信息时的用户id
+            memberList: [],
+            updateRowId: "", //超级管理员更新用户信息的用户id
             screenHeight: sessionStorage.getItem("screen-height")-280,//表格绑定最高高度
-            adminSearchQuery: "", //搜索用户绑定值
+            memberSearchQuery: "", //搜索用户绑定值
             addDialogVisible: false, //添加用户可见绑定值
             updateDialogVisible: false, //更新成员信息可见绑定值
             updateUserForm: {
@@ -228,7 +226,7 @@ export default {
             addUserForm: {
                 username: "",
                 password: "",
-                roleId: 1,
+                roleId: 2,
             },
             //添加表单校验规则
             addUserFormRules: {
@@ -262,12 +260,12 @@ export default {
         };
     },
     created() {
-        this.getAdminList();
+        this.getMemberList();
     },
     methods: {
-        //获取管理员列表
-        async getAdminList() {
-            const { data: res } = await this.$http.get("user/listadmin");
+        //获取普通成员列表
+        async getMemberList() {
+            const { data: res } = await this.$http.get("user/listmember");
             if (!res.code) {
                 this.$alert(res.message, "错误", {
                     confirmButtonText: "确定",
@@ -275,12 +273,12 @@ export default {
                     callback: (action) => {},
                 });
             }
-            this.adminList = res.data;
+            this.memberList = res.data;
             //this.switchOpen=res.data.isFrozen
             //console.log(this.switchOpen)
         },
-        //管理员冻结开关函数
-        adminStateChange(userInfo) {
+        //冻结开关函数
+        memberStateChange(userInfo) {
             let isFrozen, afterIsFrozen;
             if (!userInfo.isNotFrozen) {
                 isFrozen = "此操作将冻结该用户，是否继续？";
@@ -320,9 +318,9 @@ export default {
         },
         //搜索用户
         async searchByUsername() {
-            let url = "user/search/username/" + this.adminSearchQuery;
+            let url = "user/search/username/" + this.memberSearchQuery;
             const { data: res } = await this.$http.get(url);
-            this.adminList = res.data;
+            this.memberList = res.data;
             if (res.data == null) {
                 this.$alert("该用户不存在！", "警告", {
                     confirmButtonText: "确定",
@@ -393,7 +391,7 @@ export default {
                 this.$router.go(0);
             }
         },
-        //更新用户信息
+        //更新用户信息,将原本的已有信息写入表单
         updateInfoDialog(userInfo) {
             this.updateDialogVisible = true;
             this.updateUserForm.name = userInfo.name;
@@ -402,6 +400,7 @@ export default {
             this.updateUserForm.team = userInfo.team;
             this.updateRowId = userInfo.id;
         },
+        //点击确认后发送更新用户信息请求
         async updateUserInfoRequest() {
             let url = "user/update/" + this.updateRowId;
             const { data: res } = await this.$http.post(
