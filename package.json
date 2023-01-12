@@ -12,6 +12,10 @@
     "core-js": "^3.6.5",
     "dns": "^0.2.2",
     "element-ui": "^2.15.12",
+    "three": "^0.148.0",
+    "three-css2drender": "^1.0.0",
+    "three-obj-mtl-loader": "^1.0.3",
+    "three-orbit-controls": "^82.1.0",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0"
   },
