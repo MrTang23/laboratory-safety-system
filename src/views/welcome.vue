@@ -7,13 +7,14 @@
             <el-breadcrumb-item :to="{ path: '/welcome' }"
                 >首页</el-breadcrumb-item
             >
-            <el-breadcrumb-item>欢迎</el-breadcrumb-item>
+            <el-breadcrumb-item>welcome</el-breadcrumb-item>
 
         </el-breadcrumb>
         <el-card class="box-card">
+            <div class="index">welcome!<br>👏</div>
             
         </el-card>
-
+ 
         
     </div>
 </template>
@@ -43,6 +44,11 @@ export default {
     .el-card__body,
     .el-main {
         height: 100%;
+    }
+    .index{
+        font-size: 230px;
+        font-weight: 800;
+
     }
 }
 </style>

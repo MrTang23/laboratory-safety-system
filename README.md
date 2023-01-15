@@ -1,4 +1,4 @@
-# laboratory-safety-system
+# 享智-实验室安全管理系统
 
 ## Project setup
 ```

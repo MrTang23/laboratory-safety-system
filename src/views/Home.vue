@@ -77,12 +77,12 @@
                                 <span class="submenu">权限管理</span>
                             </template>
                             <el-menu-item
-                                index="/"
+                                index="/4-1"
                                 @click="getRoutePath()"
                                 >角色列表</el-menu-item
                             >
                             <el-menu-item
-                                index="/"
+                                index="/4-2"
                                 @click="getRoutePath()"
                                 >权限列表</el-menu-item
                             >
@@ -138,7 +138,7 @@
                     <!--页面主体内容-->
                     <el-main class="main-outer">
                         <!--路由占位符-->
-                        <router-view></router-view>
+                        <router-view v-wechat-title='$route.meta.title'></router-view>
                        
                     </el-main>
                 </el-container>

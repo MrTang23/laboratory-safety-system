@@ -245,6 +245,9 @@ export default {
 }
 
 .footer {
+    color: black;
+    font-size: 17px;
+    font-weight: 400;
     width: 100%;
     height: 60px;
     position: fixed;
